@@ -1,76 +1,114 @@
-variable .buttonEl = document.getElementById("button");
+var startButton = document.getElementById("begin");
+var startScreen = document.getElementById("coding");
+var quizScreen = document.getElementById("quiz-screen");
 
-
-var CodingEl = document.getElementById("coding");
+var Coding = document.getElementById("coding");
 var startQuiz = document.getElementById("start quiz");
 var answers = document.getElementById("answers");
 var selection = document.getElementById("selection");
 
-var question = 0;
-var listAnswers = [
+var Q = 0;
+var listQuestions = [
   {
     question:"Commonly used data types Do Not include:_________",
-    listAnswers:["strings", "booleans", "alerts", "numbers",]
-  },
-
-  {
-    question: "the Condition in an if/else statement is enclosed within_______",
-    listAnswers:["quotes", "curly brackets", "parentheses", "square brackets",]
+    listAnswers:["strings","booleans","alerts","numbers"],
+    answer: "alerts"
   },
   {
-    question: "arrays in JavaScript can be used to store_______."
-    listAnswers:["numbers and strings", "other arrays", "booleans", "all of the above",]
- },
-
+    question:"the Condition in an if/else statement is enclosed within_______",
+    listAnswers:["quotes","curly brackets","parentheses","square brackets"],
+    answer:"parentheses"
+  },
+  {
+    question:"arrays in JavaScript can be used to store_______.",
+    listAnswers:["numbers and strings", "other arrays", "booleans","all of the above"],
+    answer:"all of the above"
+    
+ }
+]
 /**
  * 
- * @param {*} array 
+
  * Takes in whatever array we pass in.
  * Preferably options for the current stage. 
  */
-function renderOptions(array) {
-  for (var i = 0; i < array.length; i++) {
-    // 1. Create an element.
-    var button = document.createElement("button");
-    // 2. Add content
-    button.setAttribute("class", "btn btn-info");
-    button.textContent = array[i];
-    button.setAttribute("data-value", array[i]);
-    // 3. Append to an existing element
-    options.append(button);
-  }
-}
+function renderOptions() {
+    var currentQuestion = listQuestions[Q];
 
+    var quizQuestion = document.getElementById("question-title");
+    var answerBox = document.getElementById("answers");
+
+    answerBox.innerHTML = "";
+    quizQuestion.textContent=currentQuestion.question;
+
+    currentQuestion.listAnswers.forEach(function(answer) {
+        var button = document.createElement("button");
+        button.classList.add("answer");
+        button.setAttribute("value", answer);
+
+        button.textContent = answer;
+
+        button.onclick = questionClick;
+        answerBox.appendChild(button)
+    })
+
+//   for (var i = 0; i < array.length; i++) {
+//     // 1. Create an element.
+//     var button = document.createElement("button");
+//     // 2. Add content
+//     button.setAttribute("class", "btn btn-info");
+//     button.textContent = array[i];
+//     button.setAttribute("data-value", array[i]);
+    // 3. Append to an existing element
+    // options.append(button);
+  }
+
+function questionClick() {
+    console.log(this.value)
+    // if statement for right or wrong answers
+    if(currentQuestion.answer !== this.value) {
+        //reduce time
+    }
+    else{
+        //count as correct
+    }
+    Q++;
+    if(Q === listQuestions.length) {
+        console.log("end")
+    } else {
+    renderOptions()
+    }
+}
 /**
  * Listens for the user to click on the options div.
  * If the target of the click matches a <button> el
  * We grab the data attribute of THAT button
  * Move to the next stage. 
  */
-options.addEventListener("click", function (event) {
-  if (event.target.matches("button")) {
-    console.log("You clicked a button");
-    var selectedCrust = event.target.getAttribute("data-value");
-    console.log(selectedCrust);
+// options.addEventListener("click", function (event) {
+//   if (event.target.matches("button")) {
+//     console.log("You clicked a button");
+//     var selectedCrust = event.target.getAttribute("data-value");
+//     console.log(selectedCrust);
 
-    selection.textContent = "";
-    var crustToDisplay = document.createElement("h3");
-    crustToDisplay.textContent = selectedCrust;
-    selection.append(crustToDisplay);
-    // TODO: Save to Local Storage
+//     selection.textContent = "";
+//     var crustToDisplay = document.createElement("h3");
+//     crustToDisplay.textContent = selectedCrust;
+//     selection.append(crustToDisplay);
+//     // TODO: Save to Local Storage
 
-    if (currentStage === stages.length - 1) {
-      alert("Your pizza is on its way!");
-    } else {
-      setTimeout(function () {
-        currentStage++;
-        var optionsToDisplay = stages[currentStage].options;
-        options.textContent = "";
-        renderOptions(optionsToDisplay);
-      }, 1000);
-    }
-  }
-});
+//     if (currentStage === stages.length - 1) {
+//       alert("Your pizza is on its way!");
+//     } else {
+//       setTimeout(function () {
+//         currentStage++;
+//         var optionsToDisplay = stages[currentStage].options;
+//         options.textContent = "";
+//         renderOptions(optionsToDisplay);
+//       }, 1000);
+//     }
+//   }
+// });
 
 /**
  * When the start button is clicked
@@ -78,9 +116,12 @@ options.addEventListener("click", function (event) {
  * Call renderOptions
  */
 startButton.addEventListener("click", function () {
-  welcomeContainer.style.display = "none";
-  var optionsToDisplay = stages[currentStage].options;
-  renderOptions(optionsToDisplay);
+  startScreen.classList.add("hide")
+  quizScreen.removeAttribute("class", "hide");
+  renderOptions();
+  console.log("hello")
+
+ 
 });
 
 
